@@ -50,6 +50,8 @@ struct SameSizeAsElementRareData : NodeRareData {
     HashMap<std::optional<Style::PseudoElementIdentifier>, Ref<Calculation::RandomKeyMap>> randomKeyMap;
 };
 
+#if !ENABLE(REF_TRACKING)
 static_assert(sizeof(ElementRareData) == sizeof(SameSizeAsElementRareData), "ElementRareData should stay small");
+#endif
 
 } // namespace WebCore
