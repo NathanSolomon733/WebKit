@@ -32,8 +32,10 @@ namespace WebCore {
 // MARK: DOM base classes
 class EventTarget;
 class Node;
+class Comment;
+class CDATASection;
 class ContainerNode;
-
+class CharacterData;
 // MARK: Documents
 class Document;
 class FTPDirectoryDocument;
@@ -42,11 +44,15 @@ class ImageDocument;
 class MediaDocument;
 class ModelDocument;
 class PluginDocument;
+class ProcessingInstruction;
 class SinkDocument;
 class SVGDocument;
+class Text;
 class TextDocument;
 class XMLDocument;
-
+class Attr;
+class DocumentFragment;
+class DocumentType;
 // MARK: Elements
 class Element;
 class StyledElement;
@@ -352,6 +358,9 @@ template<> struct RefDerefTraits<WebCore::EventTarget> : public RefDerefTraits<c
 template<> struct RefDerefTraits<const anObject> : public RefTrackingTraits { }; \
 template<> struct RefDerefTraits<anObject> : public RefDerefTraits<const anObject> { }
 
+DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::Comment);
+DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::CharacterData);
+DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::CDATASection);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::Node);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::ContainerNode);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::Document);
@@ -558,15 +567,20 @@ DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::SVGVKernElement);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::SVGViewElement);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::Image);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::GeneratedImage);
+DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::Text);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::SVGImage);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::SVGImageForContainer);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::SVGResourceImage);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::PDFDocumentImage);
+DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::ProcessingInstruction);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::BitmapImage);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::CustomPaintImage);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::GradientImage);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::CrossfadeGeneratedImage);
 DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::NamedImageGeneratedImage);
+DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::Attr);
+DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::DocumentFragment);
+DEFINE_REF_TRACKING_TRAITS_FOR(WebCore::DocumentType);
 
 } // namespace WTF
 

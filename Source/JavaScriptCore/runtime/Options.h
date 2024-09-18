@@ -169,7 +169,7 @@ private:
     static int32_t computePriorityDeltaOfWorkerThreads(int32_t twoCorePriorityDelta, int32_t multiCorePriorityDelta);
     static constexpr bool jitEnabledByDefault()
     {
-        return is32Bit() || isAddress64Bit();
+        return false;
     }
 };
 
