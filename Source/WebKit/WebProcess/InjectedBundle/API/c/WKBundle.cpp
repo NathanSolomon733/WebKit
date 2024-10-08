@@ -25,7 +25,7 @@
 
 #include "config.h"
 #include "WKBundle.h"
-
+#include "WebCore/CommonVM.h"
 #include "APIArray.h"
 #include "APIData.h"
 #include "InjectedBundle.h"
@@ -148,6 +148,9 @@ void WKBundleSetDatabaseQuota(WKBundleRef bundleRef, uint64_t quota)
 
 void WKBundleReleaseMemory(WKBundleRef)
 {
+    auto& vm = WebCore::commonVM();
+    JSC::JSLockHolder locker(vm);
+    JSC::sanitizeStackForVM(vm);
     WebCore::releaseMemory(WTF::Critical::Yes, WTF::Synchronous::Yes);
 }
 
