@@ -21,9 +21,10 @@
 */
 
 #pragma once
-
+#include "Element.h"
 #include "HitTestLocation.h"
 #include "HitTestRequest.h"
+#include "Node.h"
 #include <wtf/Forward.h>
 #include <wtf/ListHashSet.h>
 #include <wtf/TZoneMalloc.h>
@@ -179,13 +180,12 @@ private:
     HTMLMediaElement* mediaElement() const;
 #endif
     HitTestLocation m_hitTestLocation;
-
-    RefPtr<Node> m_innerNode;
-    RefPtr<Node> m_innerNonSharedNode;
+    WeakPtr<Node,  Node::WeakPtrImplType> m_innerNode;
+    WeakPtr<Node,  Node::WeakPtrImplType> m_innerNonSharedNode;
     LayoutPoint m_pointInInnerNodeFrame; // The hit-tested point in innerNode frame coordinates.
     LayoutPoint m_localPoint; // A point in the local coordinate space of m_innerNonSharedNode's renderer. Allows us to efficiently
                               // determine where inside the renderer we hit on subsequent operations.
-    RefPtr<Element> m_innerURLElement;
+    WeakPtr<Element, WeakPtrImplWithEventTargetData> m_innerURLElement;
     RefPtr<Scrollbar> m_scrollbar;
     bool m_isOverWidget { false }; // Returns true if we are over a widget (and not in the border/padding area of a RenderWidget for example).
 

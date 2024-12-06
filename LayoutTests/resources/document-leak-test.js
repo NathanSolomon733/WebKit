@@ -31,6 +31,9 @@ function createFrames(framesToCreate)
         frame.style.height = '100vh';
         frame.style.border = 'none';
         document.body.appendChild(frame);
+        frame.style.width = '100vw';
+        frame.style.height = '100vh';
+        frame.style.border = 'none';
         allFrames[i] = frame;
     }
 }
@@ -84,4 +87,49 @@ function runDocumentLeakTest(options)
     createFrames(options.framesToCreate);
     window.addEventListener("message", message => iframeSentMessage(message));
     allFrames.forEach(iframe => iframe.src = options.frameURL);
+}
+
+async function runDocumentLeakTestSynchronously(frameURL)
+{
+    var prevIframeIdentifer;
+    for (let x = 0; x < 20; x++) {
+        if (x != 0)
+            tryGC(prevIframeIdentifer)
+
+        let iframe = document.createElement("iframe");
+        iframe.id = "iframe";
+        iframe.style.width = '100vw';
+        iframe.style.height = '100vh';
+        iframe.style.border = 'none';
+        document.body.appendChild(iframe);
+        iframe.style.width = '100vw';
+        iframe.style.height = '100vh';
+        iframe.style.border = 'none';
+
+        iframe.src = frameURL;
+        await waitForMessage();
+        prevIframeIdentifer = internals.documentIdentifier(iframe.contentWindow.document)
+        iframe.src = "about:blank"
+        document.getElementById("iframe").remove();
+
+    }
+    testFailed("No iframes could be gc'd");
+    testRunner.notifyDone();
+}
+
+function waitForMessage() {
+    return new Promise(resolve => window.addEventListener("message", resolve));
+}
+
+function tryGC(frameDocumentID)
+{
+    let count = 0;
+    while (count < 5) {
+        gc();
+        if (!internals.isDocumentAlive(frameDocumentID)) {
+            testPassed("The iframe document didn't leak.");
+            testRunner.notifyDone();
+        }
+        count++;
+    }
 }

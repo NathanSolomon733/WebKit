@@ -28,12 +28,11 @@
 
 #if ENABLE(CONTEXT_MENUS)
 
+#include "Event.h"
 #include "HitTestResult.h"
 #include "Image.h"
 
 namespace WebCore {
-
-class Event;
 
 enum class ContextMenuContextType : uint8_t {
     ContextMenu,
@@ -82,7 +81,7 @@ public:
 private:
     Type m_type { Type::ContextMenu };
     HitTestResult m_hitTestResult;
-    RefPtr<Event> m_event;
+    WeakPtr<Event> m_event;
     String m_selectedText;
     bool m_hasEntireImage { false };
 
