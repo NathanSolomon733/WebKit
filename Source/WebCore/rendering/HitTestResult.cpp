@@ -354,7 +354,9 @@ RefPtr<Node> HitTestResult::nodeForImageData() const
         return m_innerNonSharedNode->shadowHost();
 #endif
 
-    return m_innerNonSharedNode;
+    if (m_innerNonSharedNode)
+        return RefPtr { m_innerNonSharedNode.get() };
+    return nullptr;
 }
 
 Image* HitTestResult::image() const

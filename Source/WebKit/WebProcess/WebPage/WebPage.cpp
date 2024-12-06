@@ -3474,7 +3474,14 @@ private:
 
 void WebPage::didDismissContextMenu()
 {
+    WTFLogAlways("WebPage::didDismissContextMenu");
     corePage()->contextMenuController().didDismissContextMenu();
+}
+
+void WebPage::destroyContext()
+{
+    WTFLogAlways("WebProcess: message to destroy context received by WebPage");
+    corePage()->contextMenuController().destroyContext();
 }
 
 void WebPage::showContextMenuFromFrame(const WebCore::FrameIdentifier& frameID, const ContextMenuContextData& contextMenuContextData, const UserData& userData)

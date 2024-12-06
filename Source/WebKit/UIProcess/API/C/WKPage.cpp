@@ -1050,6 +1050,7 @@ void WKPageSetPageContextMenuClient(WKPageRef pageRef, const WKPageContextMenuCl
 
         void showContextMenu(WebPageProxy& page, const WebCore::IntPoint& menuLocation, const Vector<Ref<WebContextMenuItem>>& menuItemsVector) override
         {
+            WTFLogAlways("showContextMenu");
             if (!canShowContextMenu())
                 return;
 
@@ -1064,11 +1065,12 @@ void WKPageSetPageContextMenuClient(WKPageRef pageRef, const WKPageContextMenuCl
 
         bool hideContextMenu(WebPageProxy& page) override
         {
+            WTFLogAlways("hiding context menu");
             if (!m_client.hideContextMenu)
                 return false;
 
             m_client.hideContextMenu(toAPI(&page), m_client.base.clientInfo);
-
+            WTFLogAlways("hiding context menu");
             return true;
         }
     };

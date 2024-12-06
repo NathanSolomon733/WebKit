@@ -318,6 +318,7 @@
 #include "XPathExpression.h"
 #include "XPathNSResolver.h"
 #include "XPathResult.h"
+#include "page/ContextMenuController.h"
 #include <JavaScriptCore/ConsoleMessage.h>
 #include <JavaScriptCore/RegularExpression.h>
 #include <JavaScriptCore/ScriptCallStack.h>

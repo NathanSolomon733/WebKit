@@ -44,10 +44,12 @@ using namespace WebCore;
 WebContextMenu::WebContextMenu(WebPage& page)
     : m_page(page)
 {
+    WTF_ALWAYS_LOG("WebContextMenu");
 }
 
 WebContextMenu::~WebContextMenu()
 {
+    WTF_ALWAYS_LOG("~WebContextMenu");
 }
 
 void WebContextMenu::show()
@@ -73,6 +75,7 @@ void WebContextMenu::show()
 
 void WebContextMenu::itemSelected(const WebContextMenuItemData& item)
 {
+    WTFLogAlways("WebContextMenu::itemSelected");
     m_page->corePage()->contextMenuController().contextMenuItemSelected(static_cast<ContextMenuAction>(item.action()), item.title());
 }
 

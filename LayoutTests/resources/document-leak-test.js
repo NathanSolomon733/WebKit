@@ -31,6 +31,9 @@ function createFrames(framesToCreate)
         frame.style.height = '100vh';
         frame.style.border = 'none';
         document.body.appendChild(frame);
+        frame.style.width = '100vw';
+        frame.style.height = '100vh';
+        frame.style.border = 'none';
         allFrames[i] = frame;
     }
 }
@@ -55,7 +58,6 @@ function iframeSentMessage(message)
         testFailed("Error loading the initial frameURL.");
         return finishJSTest();
     }
-
     let iframe = iframeForMessage(message);
     let frameDocumentID = internals.documentIdentifier(iframe.contentWindow.document);
     let checkCount = 0;
@@ -82,6 +84,59 @@ function iframeSentMessage(message)
 function runDocumentLeakTest(options)
 {
     createFrames(options.framesToCreate);
+    allFrames.forEach(iframe => iframe.src = options.frameURL);
     window.addEventListener("message", message => iframeSentMessage(message));
     allFrames.forEach(iframe => iframe.src = options.frameURL);
 }
+
+
+async function runDocumentLeakTestSynchronously(frameURL)
+{
+    for (var i = 0; i < 20; i++) {
+        createFrames(1);
+        allFrames[0].src = frameURL;
+        let result = await listenForMessageBeforeReturning();
+        if (result) {
+            testPassed("the iframe didnt leak");
+            finishJSTest();
+        }
+    }
+    testFailed("all documents leaked");
+    finishJSTest();
+}
+
+function listenForMessageBeforeReturning()
+{
+    return new Promise((resolve) => {
+        const listener = (message) => {
+            if (message.data === "testFailed") {
+                testFailed("Error loading the initial frameURL.");
+                return finishJSTest();
+            }
+            let iframe = iframeForMessage(message);
+            let frameDocumentID = internals.documentIdentifier(iframe.contentWindow.document);
+            let checkCount = 0;
+            iframe.addEventListener("load", () => {
+                let handle = setInterval(() => {
+                    gc();
+                    if (!internals.isDocumentAlive(frameDocumentID)) {
+                        clearInterval(handle);
+                        window.removeEventListener("message", listener);
+                        resolve(true);
+                        return;
+                    }
+        
+                    if (++checkCount > 5) {
+                        clearInterval(handle);
+                        window.removeEventListener("message", listener);
+                        resolve(false);
+                        return;
+                    }
+                }, 10);
+            }, { once: true });
+            iframe.src = "about:blank";
+        }
+        window.addEventListener("message", listener);
+      });
+}
+

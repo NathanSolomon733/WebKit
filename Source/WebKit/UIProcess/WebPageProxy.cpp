@@ -9668,6 +9668,7 @@ void WebPageProxy::showContextMenuFromFrame(FrameIdentifier frameID, ContextMenu
 void WebPageProxy::showContextMenu(ContextMenuContextData&& contextMenuContextData, const UserData& userData)
 {
     // Showing a context menu runs a nested runloop, which can handle messages that cause |this| to get closed.
+    WTFLogAlways("WebPageProxy::showContextMenu");
     Ref protectedThis { *this };
 
     RefPtr pageClient = this->pageClient();
@@ -9701,21 +9702,28 @@ void WebPageProxy::didShowContextMenu()
 {
     // Don't send `Messages::WebPage::DidShowContextMenu` as that should've already been eagerly
     // sent when requesting the context menu to show, regardless of the result of that request.
-
+    WTFLogAlways("UIProcess: WebPageProxy::didShowContextMenu");
     if (RefPtr pageClient = this->pageClient())
         pageClient->didShowContextMenu();
 }
 
 void WebPageProxy::didDismissContextMenu()
 {
+    WTFLogAlways("UIProcess: WebPageProxy::didDismissContextMenu");
     send(Messages::WebPage::DidDismissContextMenu());
 
-    if (RefPtr pageClient = this->pageClient())
+    if (RefPtr pageClient = this->pageClient()) 
         pageClient->didDismissContextMenu();
+}
+
+void WebPageProxy::destroyContext()
+{
+    send(Messages::WebPage::DestroyContext());
 }
 
 void WebPageProxy::contextMenuItemSelected(const WebContextMenuItemData& item)
 {
+    WTFLogAlways("UIProcess: WebPageProxy::contextMenuItemSelected");
     // Application custom items don't need to round-trip through to WebCore in the WebProcess.
     if (item.action() >= ContextMenuItemBaseApplicationTag) {
         m_contextMenuClient->customContextMenuItemSelected(*this, item);
@@ -9882,6 +9890,7 @@ void WebPageProxy::handleContextMenuKeyEvent()
 
 void WebPageProxy::dispatchAfterCurrentContextMenuEvent(CompletionHandler<void(bool)>&& completionHandler)
 {
+    WTFLogAlways("dispatchAfterCurrentContextMenuEvent");
     m_contextMenuCallbacks.append(WTFMove(completionHandler));
 
     processContextMenuCallbacks();

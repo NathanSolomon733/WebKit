@@ -1306,7 +1306,6 @@ WebCore::HandleUserInputEventResult WebFrame::handleMouseEvent(const WebMouseEve
         return false;
 
     PlatformMouseEvent platformMouseEvent = platform(mouseEvent);
-
     switch (platformMouseEvent.type()) {
     case PlatformEvent::Type::MousePressed: {
 #if ENABLE(CONTEXT_MENUS)

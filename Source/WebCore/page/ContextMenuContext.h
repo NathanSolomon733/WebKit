@@ -28,12 +28,11 @@
 
 #if ENABLE(CONTEXT_MENUS)
 
+#include "Event.h"
 #include "HitTestResult.h"
 #include "Image.h"
 
 namespace WebCore {
-
-class Event;
 
 enum class ContextMenuContextType : uint8_t {
     ContextMenu,

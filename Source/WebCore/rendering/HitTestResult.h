@@ -21,9 +21,10 @@
 */
 
 #pragma once
-
+#include "Element.h"
 #include "HitTestLocation.h"
 #include "HitTestRequest.h"
+#include "Node.h"
 #include <wtf/Forward.h>
 #include <wtf/ListHashSet.h>
 #include <wtf/TZoneMalloc.h>
@@ -179,7 +180,6 @@ private:
     HTMLMediaElement* mediaElement() const;
 #endif
     HitTestLocation m_hitTestLocation;
-
     RefPtr<Node> m_innerNode;
     RefPtr<Node> m_innerNonSharedNode;
     LayoutPoint m_pointInInnerNodeFrame; // The hit-tested point in innerNode frame coordinates.

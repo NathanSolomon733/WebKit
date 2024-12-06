@@ -2068,6 +2068,7 @@ private:
 
 #if ENABLE(CONTEXT_MENUS)
     void didDismissContextMenu();
+    void destroyContext();
 #endif
 #if ENABLE(CONTEXT_MENU_EVENT)
     void contextMenuForKeyEvent();
