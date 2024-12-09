@@ -1661,6 +1661,7 @@ public:
     // Called by the WebContextMenuProxy.
     void didShowContextMenu();
     void didDismissContextMenu();
+    void destroyContext();
     void contextMenuItemSelected(const WebContextMenuItemData&);
     void handleContextMenuKeyEvent();
 #endif

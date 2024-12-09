@@ -81,7 +81,7 @@ public:
 private:
     Type m_type { Type::ContextMenu };
     HitTestResult m_hitTestResult;
-    WeakPtr<Event> m_event;
+    RefPtr<Event> m_event;
     String m_selectedText;
     bool m_hasEntireImage { false };
 

@@ -20,6 +20,7 @@ function isSpellingCorrectionMenuItemEnabled(element)
     y = elementRect.top + (elementRect.height / 2);
     eventSender.mouseMoveTo(x, y);
     const spellingMenuItem = eventSender.contextClick().find(item => item.title === "Spelling and Grammar");
+    eventSender.mouseUp()
     return spellingMenuItem.children.find(item => item.title === "Correct Spelling Automatically").enabled;
 }
 
@@ -33,7 +34,7 @@ if (window.eventSender) {
     shouldBeTrue("isSpellingCorrectionMenuItemEnabled(bottomInput)");
 }
 
-onload = () => parent.postMessage("MESSAGE");
+onload = () => parent.postMessage("iframe loaded");
 </script>
 </body>
 </html>

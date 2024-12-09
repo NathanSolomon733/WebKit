@@ -232,6 +232,7 @@ WebContextMenuProxyMac::~WebContextMenuProxyMac()
 
 void WebContextMenuProxyMac::contextMenuItemSelected(const WebContextMenuItemData& item)
 {
+    WTF_ALWAYS_LOG("WebContextMenuProxyMac::contextMenuItemSelected");
 #if ENABLE(SERVICE_CONTROLS)
     clearServicesMenu();
 #endif
@@ -891,9 +892,10 @@ void WebContextMenuProxyMac::showContextMenuWithItems(Vector<Ref<WebContextMenuI
         return;
     }
 #endif
-
+    WTF_ALWAYS_LOG("start WebContextMenuProxyMac::showContextMenuWithItems");
     if (page()->contextMenuClient().canShowContextMenu()) {
         page()->contextMenuClient().showContextMenu(Ref { *page() }, m_context.menuLocation(), items);
+        WTF_ALWAYS_LOG("returning early");
         return;
     }
 
@@ -905,6 +907,7 @@ void WebContextMenuProxyMac::showContextMenuWithItems(Vector<Ref<WebContextMenuI
     NSPoint menuLocation = [webView convertPoint:m_context.menuLocation() toView:nil];
     auto event = page()->createSyntheticEventForContextMenu(menuLocation);
     [NSMenu popUpContextMenu:m_menu.get() withEvent:event.get() forView:webView.get()];
+    page()->destroyContext();
 }
 
 void WebContextMenuProxyMac::useContextMenuItems(Vector<Ref<WebContextMenuItem>>&& items)

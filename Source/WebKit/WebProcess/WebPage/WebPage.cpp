@@ -3474,7 +3474,13 @@ private:
 
 void WebPage::didDismissContextMenu()
 {
+    WTFLogAlways("WebPage::didDismissContextMenu");
     corePage()->contextMenuController().didDismissContextMenu();
+}
+
+void WebPage::destroyContext()
+{
+    corePage()->contextMenuController().destroyContext();
 }
 
 void WebPage::showContextMenuFromFrame(const WebCore::FrameIdentifier& frameID, const ContextMenuContextData& contextMenuContextData, const UserData& userData)

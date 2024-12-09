@@ -58,7 +58,6 @@ function iframeSentMessage(message)
         testFailed("Error loading the initial frameURL.");
         return finishJSTest();
     }
-
     let iframe = iframeForMessage(message);
     let frameDocumentID = internals.documentIdentifier(iframe.contentWindow.document);
     let checkCount = 0;
@@ -85,51 +84,59 @@ function iframeSentMessage(message)
 function runDocumentLeakTest(options)
 {
     createFrames(options.framesToCreate);
+    allFrames.forEach(iframe => iframe.src = options.frameURL);
     window.addEventListener("message", message => iframeSentMessage(message));
     allFrames.forEach(iframe => iframe.src = options.frameURL);
 }
 
+
 async function runDocumentLeakTestSynchronously(frameURL)
 {
-    var prevIframeIdentifer;
-    for (let x = 0; x < 20; x++) {
-        if (x != 0)
-            tryGC(prevIframeIdentifer)
-
-        let iframe = document.createElement("iframe");
-        iframe.id = "iframe";
-        iframe.style.width = '100vw';
-        iframe.style.height = '100vh';
-        iframe.style.border = 'none';
-        document.body.appendChild(iframe);
-        iframe.style.width = '100vw';
-        iframe.style.height = '100vh';
-        iframe.style.border = 'none';
-
-        iframe.src = frameURL;
-        await waitForMessage();
-        prevIframeIdentifer = internals.documentIdentifier(iframe.contentWindow.document)
-        iframe.src = "about:blank"
-        document.getElementById("iframe").remove();
-
-    }
-    testFailed("No iframes could be gc'd");
-    testRunner.notifyDone();
-}
-
-function waitForMessage() {
-    return new Promise(resolve => window.addEventListener("message", resolve));
-}
-
-function tryGC(frameDocumentID)
-{
-    let count = 0;
-    while (count < 5) {
-        gc();
-        if (!internals.isDocumentAlive(frameDocumentID)) {
-            testPassed("The iframe document didn't leak.");
-            testRunner.notifyDone();
+    for (var i = 0; i < 20; i++) {
+        createFrames(1);
+        allFrames[0].src = frameURL;
+        let result = await listenForMessageBeforeReturning();
+        if (result) {
+            testPassed("the iframe didnt leak");
+            finishJSTest();
         }
-        count++;
     }
+    testFailed("all documents leaked");
+    finishJSTest();
 }
+
+function listenForMessageBeforeReturning()
+{
+    return new Promise((resolve) => {
+        const listener = (message) => {
+            if (message.data === "testFailed") {
+                testFailed("Error loading the initial frameURL.");
+                return finishJSTest();
+            }
+            let iframe = iframeForMessage(message);
+            let frameDocumentID = internals.documentIdentifier(iframe.contentWindow.document);
+            let checkCount = 0;
+            iframe.addEventListener("load", () => {
+                let handle = setInterval(() => {
+                    gc();
+                    if (!internals.isDocumentAlive(frameDocumentID)) {
+                        clearInterval(handle);
+                        window.removeEventListener("message", listener);
+                        resolve(true);
+                        return;
+                    }
+        
+                    if (++checkCount > 5) {
+                        clearInterval(handle);
+                        window.removeEventListener("message", listener);
+                        resolve(false);
+                        return;
+                    }
+                }, 10);
+            }, { once: true });
+            iframe.src = "about:blank";
+        }
+        window.addEventListener("message", listener);
+      });
+}
+

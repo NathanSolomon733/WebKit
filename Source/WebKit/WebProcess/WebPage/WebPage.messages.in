@@ -391,6 +391,7 @@ GenerateSyntheticEditingCommand(enum:uint8_t WebKit::SyntheticEditingCommandType
 #if ENABLE(CONTEXT_MENUS)
     # Context menu.
     DidDismissContextMenu()
+    DestroyContextMenu()
     DidSelectItemFromActiveContextMenu(WebKit::WebContextMenuItemData menuItem)
     ContextMenuForKeyEvent()
 #endif

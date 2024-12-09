@@ -54,7 +54,7 @@ public:
 
     ContextMenu* contextMenu() const { return m_contextMenu.get(); }
     WEBCORE_EXPORT void clearContextMenu();
-
+    WEBCORE_EXPORT void destroyContext();
     void handleContextMenuEvent(Event&);
     void showContextMenu(Event&, ContextMenuProvider&);
 
@@ -65,9 +65,9 @@ public:
 
     WEBCORE_EXPORT void checkOrEnableIfNeeded(ContextMenuItem&) const;
 
-    void setContextMenuContext(const ContextMenuContext& context) { m_context = context; }
-    const ContextMenuContext& context() const { return m_context; }
-    const HitTestResult& hitTestResult() const { return m_context.hitTestResult(); }
+    void setContextMenuContext(const ContextMenuContext& context) { m_context = std::make_unique<ContextMenuContext>(context); }
+    const ContextMenuContext& context() const { return *m_context; }
+    const HitTestResult& hitTestResult() const { return m_context->hitTestResult(); }
 
 #if USE(ACCESSIBILITY_CONTEXT_MENUS)
     void showContextMenuAt(LocalFrame&, const IntPoint& clickPoint);
@@ -104,7 +104,7 @@ private:
     UniqueRef<ContextMenuClient> m_client;
     std::unique_ptr<ContextMenu> m_contextMenu;
     RefPtr<ContextMenuProvider> m_menuProvider;
-    ContextMenuContext m_context;
+    std::unique_ptr<ContextMenuContext> m_context;
     bool m_isHandlingContextMenuEvent { false };
 };
 
