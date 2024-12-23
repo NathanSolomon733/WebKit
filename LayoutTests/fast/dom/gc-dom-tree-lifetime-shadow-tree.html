@@ -21,32 +21,34 @@ var testHtml = "<div id='div0-parent'><div id='div0'><div id='div0-child'></div>
 var numNodesAfterTest = 0;
 var prevNodes = 0;
 var numNodesDeleted = 0;
+
 testCases.forEach(function (test) {
-    var divX, divY, divZ;
+    var divX, divY, divZ, hostNode, shadowRoot;
     debug("=== Initial state ===");
-    rootDiv.innerHTML = testHtml;
-    divX = document.getElementById(test[0]);
-    divY = document.getElementById(test[1]);
-    divZ = document.getElementById(test[2]);
+    shadowRoot = setUpShadowTree(rootDiv, hostNode, testHtml)
+    rootDiv.innerHTML = "";
+    divX = shadowRoot.getElementById(test[0]);
+    divY = shadowRoot.getElementById(test[1]);
+    divZ = shadowRoot.getElementById(test[2]);
     checkParentAndChildAlive(divX, test[0]);
     checkParentAndChildAlive(divY, test[1]);
     checkParentAndChildAlive(divZ, test[2]);
 
     debug("=== After clearing innerHTML ===");
-    rootDiv.innerHTML = testHtml;
-    divX = document.getElementById(test[0]);
-    divY = document.getElementById(test[1]);
-    divZ = document.getElementById(test[2]);
+    shadowRoot = setUpShadowTree(rootDiv, hostNode, testHtml)
+    divX = shadowRoot.getElementById(test[0]);
+    divY = shadowRoot.getElementById(test[1]);
+    divZ = shadowRoot.getElementById(test[2]);
     rootDiv.innerHTML = "";
     checkParentAndChildAlive(divX, test[0]);
     checkParentAndChildAlive(divY, test[1]);
     checkParentAndChildAlive(divZ, test[2]);
 
     debug("=== After clearing innerHTML and divX ===");
-    rootDiv.innerHTML = testHtml;
-    divX = document.getElementById(test[0]);
-    divY = document.getElementById(test[1]);
-    divZ = document.getElementById(test[2]);
+    shadowRoot = setUpShadowTree(rootDiv, hostNode, testHtml)
+    divX = shadowRoot.getElementById(test[0]);
+    divY = shadowRoot.getElementById(test[1]);
+    divZ = shadowRoot.getElementById(test[2]);
     rootDiv.innerHTML = "";
     divX = null;
     gc();
@@ -54,10 +56,10 @@ testCases.forEach(function (test) {
     checkParentAndChildAlive(divZ, test[2]);
 
     debug("=== After clearing innerHTML, divX and divY ===");
-    rootDiv.innerHTML = testHtml;
-    divX = document.getElementById(test[0]);
-    divY = document.getElementById(test[1]);
-    divZ = document.getElementById(test[2]);
+    shadowRoot = setUpShadowTree(rootDiv, hostNode, testHtml)
+    divX = shadowRoot.getElementById(test[0]);
+    divY = shadowRoot.getElementById(test[1]);
+    divZ = shadowRoot.getElementById(test[2]);
     rootDiv.innerHTML = "";
     divX = null;
     divY = null;
@@ -65,10 +67,10 @@ testCases.forEach(function (test) {
     checkParentAndChildAlive(divZ, test[2]);
 
     debug("=== After clearing innerHTML, divX, divY and divZ ===");
-    rootDiv.innerHTML = testHtml;
-    divX = document.getElementById(test[0]);
-    divY = document.getElementById(test[1]);
-    divZ = document.getElementById(test[2]);
+    shadowRoot = setUpShadowTree(rootDiv, hostNode, testHtml)
+    divX = shadowRoot.getElementById(test[0]);
+    divY = shadowRoot.getElementById(test[1]);
+    divZ = shadowRoot.getElementById(test[2]);
     if (window.internals)
         prevNodes = window.internals.numberOfLiveNodes();
     rootDiv.innerHTML = "";
@@ -114,8 +116,19 @@ function checkParentAndChildAlive(div, name) {
     gc();
 }
 
+function setUpShadowTree(rootDiv, hostNode, testHtml) {
+    hostNode = document.createElement("div");
+    shadowRoot = hostNode.attachShadow({mode: 'closed'});
+    shadowRoot.innerHTML = testHtml;
+    rootDiv.appendChild(hostNode);
+    return shadowRoot;
+}
+
 var successfullyParsed = true;
 </script>
 <script src="../../resources/js-test-post.js"></script>
 </body>
 </html>
+
+
+

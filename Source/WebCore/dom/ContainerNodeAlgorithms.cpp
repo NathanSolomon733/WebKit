@@ -101,38 +101,58 @@ inline void updateObservability(RemovedSubtreeObservability& currentObservabilit
         currentObservability = newStatus;
 }
 
-static RemovedSubtreeObservability notifyNodeRemovedFromDocument(ContainerNode& oldParentOfRemovedTree, TreeScopeChange treeScopeChange, Node& node)
+static RemovedSubtreeResult notifyNodeRemovedFromDocument(ContainerNode& oldParentOfRemovedTree, TreeScopeChange treeScopeChange, Node& node)
 {
     ASSERT(!node.parentNode());
     ASSERT(oldParentOfRemovedTree.isConnected());
     ASSERT(node.isConnected());
 
     RemovedSubtreeObservability observability = RemovedSubtreeObservability::NotObservable;
+    auto canDelayNodeDeletion = ContainerNode::CanDelayNodeDeletion::Yes;
+    unsigned subTreeSize = 0;
     for (RefPtr currentNode = &node; currentNode; currentNode = NodeTraversal::next(*currentNode)) {
+        ++subTreeSize;
         currentNode->removedFromAncestor(Node::RemovalType { /* disconnectedFromDocument */ true, treeScopeChange == TreeScopeChange::Changed }, oldParentOfRemovedTree);
+        if (!AsyncNodeDeletionQueue::canNodeBeDeletedAsync(node))
+            canDelayNodeDeletion = ContainerNode::CanDelayNodeDeletion::No;
         updateObservability(observability, observabilityOfRemovedNode(*currentNode));
-        if (RefPtr root = currentNode->shadowRoot())
-            updateObservability(observability, notifyNodeRemovedFromDocument(oldParentOfRemovedTree, TreeScopeChange::DidNotChange, *root));
+        if (RefPtr root = currentNode->shadowRoot()) {
+            auto [shadowSubTreeSize, newObservability, canBeDelayed] = notifyNodeRemovedFromDocument(oldParentOfRemovedTree, TreeScopeChange::DidNotChange, *root);
+            if (canBeDelayed == ContainerNode::CanDelayNodeDeletion::No)
+                canDelayNodeDeletion = ContainerNode::CanDelayNodeDeletion::No;
+            subTreeSize += shadowSubTreeSize;
+            updateObservability(observability, newObservability);
+        }
+
     }
-    return observability;
+    return { subTreeSize, observability, canDelayNodeDeletion };
 }
 
-static RemovedSubtreeObservability notifyNodeRemovedFromTree(ContainerNode& oldParentOfRemovedTree, TreeScopeChange treeScopeChange, Node& node)
+static RemovedSubtreeResult notifyNodeRemovedFromTree(ContainerNode& oldParentOfRemovedTree, TreeScopeChange treeScopeChange, Node& node)
 {
     ASSERT(!node.parentNode());
     ASSERT(!oldParentOfRemovedTree.isConnected());
-
+    unsigned subTreeSize = 0;
+    auto canDelayNodeDeletion = ContainerNode::CanDelayNodeDeletion::Yes;
     RemovedSubtreeObservability observability = RemovedSubtreeObservability::NotObservable;
     for (RefPtr currentNode = &node; currentNode; currentNode = NodeTraversal::next(*currentNode)) {
+        ++subTreeSize;
         currentNode->removedFromAncestor(Node::RemovalType { /* disconnectedFromDocument */ false, treeScopeChange == TreeScopeChange::Changed }, oldParentOfRemovedTree);
+        if (!AsyncNodeDeletionQueue::canNodeBeDeletedAsync(node))
+            canDelayNodeDeletion = ContainerNode::CanDelayNodeDeletion::No;
         updateObservability(observability, observabilityOfRemovedNode(*currentNode));
-        if (RefPtr root = currentNode->shadowRoot())
-            updateObservability(observability, notifyNodeRemovedFromTree(oldParentOfRemovedTree, TreeScopeChange::DidNotChange, *root));
+        if (RefPtr root = currentNode->shadowRoot()) {
+            auto [shadowSubTreeSize, newObservability, canBeDelayed] = notifyNodeRemovedFromTree(oldParentOfRemovedTree, TreeScopeChange::DidNotChange, *root);
+            if (canBeDelayed == ContainerNode::CanDelayNodeDeletion::No)
+                canDelayNodeDeletion = ContainerNode::CanDelayNodeDeletion::No;
+            subTreeSize += shadowSubTreeSize;
+            updateObservability(observability, newObservability);
+        }
     }
-    return observability;
+    return { subTreeSize, observability, canDelayNodeDeletion };
 }
 
-RemovedSubtreeObservability notifyChildNodeRemoved(ContainerNode& oldParentOfRemovedTree, Node& child)
+RemovedSubtreeResult notifyChildNodeRemoved(ContainerNode& oldParentOfRemovedTree, Node& child)
 {
     // Assert that the caller of this function has an instance of ScriptDisallowedScope.
     ASSERT(!isMainThread() || ScriptDisallowedScope::InMainThread::hasDisallowedScope());

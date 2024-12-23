@@ -8,6 +8,8 @@
 <![CDATA[
 
 var g = document.getElementById("g");
+var failCount = 0;
+var maxFailCount = 100;
 
 function log(message) {
     var logDiv = document.getElementById('log');
@@ -50,19 +52,21 @@ function continueTest() {
     while (g.hasChildNodes())
         g.removeChild(g.lastChild);
 
-    setTimeout(finishTest, 0);
+    setTimeout(() => window.requestIdleCallback(finishTest), 0);
 }
 
 function finishTest() {
     // The conservative GC may not reclaim all unreachable nodes.
     GCController.collect();
     var liveDelta = window.internals.numberOfLiveNodes() - originalLiveElements;
-    if (liveDelta < 30)
+    if (liveDelta < 30) {
         log("PASS");
-    else
+        testRunner.notifyDone();
+    } else if (++failCount > maxFailCount) {
         log("FAIL: " + liveDelta + " extra live node(s)");
-
-    testRunner.notifyDone();
+        testRunner.notifyDone();
+    } else
+        window.requestIdleCallback(finishTest);
 }
 
 function load() {

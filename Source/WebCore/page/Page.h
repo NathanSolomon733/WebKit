@@ -1181,6 +1181,7 @@ public:
 
     void opportunisticallyRunIdleCallbacks(MonotonicTime deadline);
     void performOpportunisticallyScheduledTasks(MonotonicTime deadline);
+    void deleteRemovedNodes();
     String ensureMediaKeysStorageDirectoryForOrigin(const SecurityOriginData&);
     WEBCORE_EXPORT void setMediaKeysStorageDirectory(const String&);
 

@@ -146,6 +146,8 @@ public:
     ExceptionOr<void> ensurePreInsertionValidityForPhantomDocumentFragment(NodeVector& newChildren, Node* refChild = nullptr);
     ExceptionOr<void> insertChildrenBeforeWithoutPreInsertionValidityCheck(NodeVector&&, Node* nextChild = nullptr);
 
+    enum class CanDelayNodeDeletion : uint8_t { No, Yes, Unknown };
+
 protected:
     explicit ContainerNode(Document&, NodeType, OptionSet<TypeFlag> = { });
 
@@ -161,10 +163,15 @@ private:
     void executePreparedChildrenRemoval();
     enum class DeferChildrenChanged : bool { No, Yes };
     enum class DidRemoveElements : bool { No, Yes };
-    DidRemoveElements removeAllChildrenWithScriptAssertion(ChildChange::Source, NodeVector& children, DeferChildrenChanged = DeferChildrenChanged::No);
+    struct RemoveAllChildrenResult {
+        unsigned subTreeSize;
+        DidRemoveElements didRemoveElements;
+        CanDelayNodeDeletion canBeDelayed;
+    };
+    RemoveAllChildrenResult removeAllChildrenWithScriptAssertionMaybeAsync(ChildChange::Source, NodeVector& children, DeferChildrenChanged = DeferChildrenChanged::No);
+    RemoveAllChildrenResult removeAllChildrenWithScriptAssertion(ChildChange::Source, NodeVector& children, DeferChildrenChanged = DeferChildrenChanged::No);
     bool removeNodeWithScriptAssertion(Node&, ChildChange::Source);
     ExceptionOr<void> removeSelfOrChildNodesForInsertion(Node&, NodeVector&);
-
     void removeBetween(Node* previousChild, Node* nextChild, Node& oldChild);
     ExceptionOr<void> appendChildWithoutPreInsertionValidityCheck(Node&);
 

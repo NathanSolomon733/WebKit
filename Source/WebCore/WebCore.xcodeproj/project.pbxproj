@@ -63,6 +63,7 @@
 		00B9318C13BA8DCC0035A948 /* XMLDocumentParserScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B9318613BA867F0035A948 /* XMLDocumentParserScope.h */; };
 		00C60E3F13D76D7E0092A275 /* MarkupTokenizerInlines.h in Headers */ = {isa = PBXBuildFile; fileRef = 00C60E3E13D76D7E0092A275 /* MarkupTokenizerInlines.h */; };
 		016F380E29AA36A800167F2E /* ApplePayLaterAvailability.h in Headers */ = {isa = PBXBuildFile; fileRef = 016F380D29AA36A200167F2E /* ApplePayLaterAvailability.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		01D22A1F2CFD826C002DC857 /* AsyncNodeDeletionQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 01D22A1C2CFD73C7002DC857 /* AsyncNodeDeletionQueue.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0208E1832D213D9900BECD3D /* BackForwardFrameItemIdentifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 0208E1822D213D9100BECD3D /* BackForwardFrameItemIdentifier.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		021D763629C2A24F00063684 /* ScrollbarsControllerMac.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F02245426F15D75000265C3 /* ScrollbarsControllerMac.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		021D763929C2A43B00063684 /* ScrollbarsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F02245226F15D5F000265C3 /* ScrollbarsController.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -6797,6 +6798,7 @@
 		00C60E3E13D76D7E0092A275 /* MarkupTokenizerInlines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupTokenizerInlines.h; sourceTree = "<group>"; };
 		016F380929AA33E300167F2E /* ApplePayLaterAvailability.idl */ = {isa = PBXFileReference; lastKnownFileType = text; path = ApplePayLaterAvailability.idl; sourceTree = "<group>"; };
 		016F380D29AA36A200167F2E /* ApplePayLaterAvailability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApplePayLaterAvailability.h; sourceTree = "<group>"; };
+		01D22A1C2CFD73C7002DC857 /* AsyncNodeDeletionQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AsyncNodeDeletionQueue.h; sourceTree = "<group>"; };
 		0208E1822D213D9100BECD3D /* BackForwardFrameItemIdentifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BackForwardFrameItemIdentifier.h; sourceTree = "<group>"; };
 		0223E06C2AAEBBCF00AF30FB /* HandleUserInputEventResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HandleUserInputEventResult.h; sourceTree = "<group>"; };
 		0223E0732AAED62200AF30FB /* RemoteUserInputEventData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteUserInputEventData.h; sourceTree = "<group>"; };
@@ -38145,6 +38147,7 @@
 				46BD05C425BB6E4F00225F30 /* AddEventListenerOptions.idl */,
 				E3AE6CD12252F27000C70B50 /* AllDescendantsCollection.cpp */,
 				83BB5C871D5D6F3A005A71F4 /* AllDescendantsCollection.h */,
+				01D22A1C2CFD73C7002DC857 /* AsyncNodeDeletionQueue.h */,
 				A8C4A7FC09D563270003AC8D /* Attr.cpp */,
 				A8C4A7FB09D563270003AC8D /* Attr.h */,
 				93EEC1E509C2877700C515D1 /* Attr.idl */,
@@ -39661,6 +39664,7 @@
 				716C4C3627EB60C900531467 /* ARKitBadgeSystemImage.h in Headers */,
 				FD5686CA13AC180200B69C68 /* AsyncAudioDecoder.h in Headers */,
 				E1CDE9221501916900862CC5 /* AsyncFileStream.h in Headers */,
+				01D22A1F2CFD826C002DC857 /* AsyncNodeDeletionQueue.h in Headers */,
 				0FFD4D6118651FA300512F6E /* AsyncScrollingCoordinator.h in Headers */,
 				E5F67D962B65CDBE00CC30DE /* AttachmentAssociatedElement.h in Headers */,
 				E36D701F27B7200C006531B7 /* AttachmentElementClient.h in Headers */,
