@@ -44,7 +44,7 @@
 #include <wtf/TZoneMallocInlines.h>
 
 namespace WebCore {
-
+DEFINE_ALLOCATOR_WITH_HEAP_IDENTIFIER(AcceleratedEffect);
 AcceleratedEffect::Keyframe::Keyframe(double offset, AcceleratedEffectValues&& values)
     : m_offset(offset)
     , m_values(WTFMove(values))

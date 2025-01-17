@@ -38,7 +38,7 @@
 #include <JavaScriptCore/JSLock.h>
 
 namespace WebCore {
-
+DEFINE_ALLOCATOR_WITH_HEAP_IDENTIFIER(HTMLImageLoader);
 HTMLImageLoader::HTMLImageLoader(Element& element)
     : ImageLoader(element)
 {

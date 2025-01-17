@@ -27,6 +27,7 @@
 
 #if ENABLE(THREADED_ANIMATION_RESOLUTION)
 
+#include "AnimationMalloc.h"
 #include "AcceleratedEffect.h"
 #include <wtf/HashSet.h>
 #include <wtf/Seconds.h>

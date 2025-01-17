@@ -43,7 +43,7 @@ namespace WebCore {
 class FloatRect;
 class IntRect;
 class KeyframeEffect;
-
+DECLARE_ALLOCATOR_WITH_HEAP_IDENTIFIER(AcceleratedEffect);
 class AcceleratedEffect : public RefCountedAndCanMakeWeakPtr<AcceleratedEffect>, public KeyframeInterpolation {
     WTF_MAKE_TZONE_OR_ISO_ALLOCATED(AcceleratedEffect);
 public:

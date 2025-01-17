@@ -28,7 +28,7 @@
 #include "SVGImageElement.h"
 
 namespace WebCore {
-
+DEFINE_ALLOCATOR_WITH_HEAP_IDENTIFIER(SVGImageLoader);
 SVGImageLoader::SVGImageLoader(SVGImageElement& element)
     : ImageLoader(element)
 {
