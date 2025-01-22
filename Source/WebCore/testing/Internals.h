@@ -587,7 +587,6 @@ public:
     unsigned numberOfLiveNodes() const;
     unsigned numberOfLiveDocuments() const;
     unsigned referencingNodeCount(const Document&) const;
-    ExceptionOr<void> executeOpportunisticallyScheduledTasks() const;
 
 #if ENABLE(WEB_AUDIO)
     // BaseAudioContext lifetime testing.

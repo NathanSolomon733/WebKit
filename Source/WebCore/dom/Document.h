@@ -27,7 +27,6 @@
 
 #pragma once
 
-#include "AsyncNodeDeletionQueue.h"
 #include "Color.h"
 #include "ContainerNode.h"
 #include "ContextDestructionObserverInlines.h"
@@ -519,7 +518,6 @@ public:
     WEBCORE_EXPORT DOMImplementation& implementation();
     
     Element* documentElement() const { return m_documentElement.get(); }
-    AsyncNodeDeletionQueue& asyncNodeDeletionQueue() { return m_asyncNodeDeletionQueue; };
     inline RefPtr<Element> protectedDocumentElement() const; // Defined in DocumentInlines.h.
     static constexpr ptrdiff_t documentElementMemoryOffset() { return OBJECT_OFFSETOF(Document, m_documentElement); }
 
@@ -2156,7 +2154,6 @@ private:
     RefPtr<LocalDOMWindow> m_domWindow;
     WeakPtr<Document, WeakPtrImplWithEventTargetData> m_contextDocument;
     OptionSet<ParserContentPolicy> m_parserContentPolicy;
-    AsyncNodeDeletionQueue m_asyncNodeDeletionQueue;
 
     RefPtr<CachedResourceLoader> m_cachedResourceLoader;
     RefPtr<DocumentParser> m_parser;

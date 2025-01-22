@@ -1,6 +1,0 @@
-PASS window.internals.numberOfLiveNodes() < startingNodeCount + asyncNodeDeletionLimit is true
-PASS window.internals.numberOfLiveNodes() < startingNodeCount + asyncNodeDeletionLimit is true
-PASS successfullyParsed is true
-
-TEST COMPLETE
-

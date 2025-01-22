@@ -3112,15 +3112,6 @@ unsigned Internals::referencingNodeCount(const Document& document) const
     return document.referencingNodeCount();
 }
 
-ExceptionOr<void> Internals::executeOpportunisticallyScheduledTasks() const
-{
-    Document* document = contextDocument();
-    if (!document || !document->page())
-        return Exception { ExceptionCode::InvalidAccessError };
-    document->page()->performOpportunisticallyScheduledTasks(MonotonicTime::now());
-    return { };
-}
-
 #if ENABLE(WEB_AUDIO)
 uint64_t Internals::baseAudioContextIdentifier(const BaseAudioContext& context)
 {

@@ -1188,8 +1188,7 @@ public:
     WEBCORE_EXPORT void removeRootFrame(LocalFrame&);
 
     void opportunisticallyRunIdleCallbacks(MonotonicTime deadline);
-    WEBCORE_EXPORT void performOpportunisticallyScheduledTasks(MonotonicTime deadline);
-    void deleteRemovedNodes();
+    void performOpportunisticallyScheduledTasks(MonotonicTime deadline);
     String ensureMediaKeysStorageDirectoryForOrigin(const SecurityOriginData&);
     WEBCORE_EXPORT void setMediaKeysStorageDirectory(const String&);
 

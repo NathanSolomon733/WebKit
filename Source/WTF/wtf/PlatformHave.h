@@ -87,10 +87,6 @@
 #endif
 
 #if PLATFORM(MAC)
-#define HAVE_OPPORTUNISTIC_TASK_SCHEDULER 1
-#endif
-
-#if PLATFORM(MAC)
 #define HAVE_HISERVICES 1
 #endif
 
