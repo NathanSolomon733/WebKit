@@ -102,10 +102,7 @@ void OpportunisticTaskScheduler::runLoopObserverFired()
     m_runloopCountAfterBeingScheduled++;
 
     bool shouldRunTask = [&] {
-        if (!hasImminentlyScheduledWork())
-            return true;
-
-        static constexpr auto fractionOfRenderingIntervalWhenScheduledWorkIsImminent = 0.72;
+        static constexpr auto fractionOfRenderingIntervalWhenScheduledWorkIsImminent = 1;
         if (remainingTime > fractionOfRenderingIntervalWhenScheduledWorkIsImminent * page->preferredRenderingUpdateInterval())
             return true;
 
